@@ -57,7 +57,7 @@ var LazyImageLoader =
 
           // if intersection observer doesn't exist just load the image
           if (typeof window["IntersectionObserver"] === "undefined") {
-            this.loadImagesImmediately(images);
+            this.loadImagesImmediately(_this.images);
           } else {
             // create the observer
             this.observer = new IntersectionObserver(
