@@ -68,14 +68,48 @@ class LazyImageLoader {
     });
   }
 
+  createSVG(img,src){
+    var imgID = img.getAttribute('id');
+    var imgClass = img.getAttribute('class');
+    var requestSVG = new XMLHttpRequest();
+    requestSVG.open('GET', src, true);
+    requestSVG.send();
+
+    requestSVG.onload = function(e) {
+        if (requestSVG.status >= 200 && requestSVG.status < 400) {
+            // Success!
+            var svg = requestSVG.responseXML.querySelector('svg');
+            svg.getAttribute('xmlns:a') && svg.removeAttr('xmlns:a');
+
+            if (imgID ) {
+                svg.setAttribute('id', imgID);
+            }
+
+            if ( imgClass ) {
+                svg.setAttribute('class', imgClass + ' replaced-svg');
+            }
+
+            img.replaceWith(svg);
+        } 
+    }
+}
+
+  
+  
   applyImage(img, src){
     img.classList.add("js-lazy-image--handled");
     if (img.tagName === "IMG"){
-      img.src = src
+      if (img.classList.contains('svg')) {
+          this.createSVG(img, src);
+      }else{
+          img.src = src;
+      }
     } else {
       img.style.backgroundImage = `url('${src}')`;
     }  
     console.log("applied image", src);
+    
+    document.body.classList.add('lazy-loaded');
   }
 }
 
