@@ -22,3 +22,8 @@
             });
         }
     });
+
+    // prevent page from jumping to the top
+    jQuery('a[href="#"]').click(function(e){
+        e.preventDefault();
+    });
